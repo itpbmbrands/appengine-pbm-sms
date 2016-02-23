@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Fjalla+One' rel='stylesheet' type='text/css'>
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/styles.css') }}">
+
+
+    </head>
+
+    <body>
+
+
+        <div id="main" class="container">
+
+            <br/>
+
+            <h2>Complete!</h2>
+            <br/>
+            {% if failed %}
+                <h3>Failures - Text failed sending to the following people:</h3>
+            {% else %}
+                <h3>The message was successfully sent to every number on the list.</h3>
+            {% endif %}
+            <ul>
+            {% for name in failed %}
+                <li>{{ name }}</li>
+            {% endfor %}
+            </ul>
+
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    </body>
+
+
+
+</html>

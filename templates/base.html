@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+
+    </head>
+
+    <body>
+
+
+        <div id="main" class="container">
+
+            <br/>
+            <h2 class="alert alert-success">PBM Text Communications</h2>
+            <div>
+                <h3>{{ greeting }}<span class="pull-right">
+
+                {% if logged_in %}
+                    <a href="{{ logout_url }}" class="btn btn-danger">Logout</a>
+                {% else %}
+                    <a href="{{ login_url }}" class="btn btn-primary">Login</a>
+                {% endif %}
+                </span> </h3>
+            </div>
+
+
+
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <hr/>
+                    <ul class="alert alert-danger" style="list-style-type:none">
+                    {% for message in messages %}
+                        <li>{{ message|safe }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+
+            <hr/>
+            {% if authorized %}
+
+
+
+                <h3>The uploaded csv must:</h3>
+                <ul>
+                    <li>be comma delimited</li>
+                    <li>not contain column headers</li>
+                    <li>have rows containing first name, last name, phone number in that order</li>
+                    <li>have a phone number formatted EXACTLY like this:  +15556667777</li>
+                </ul>
+
+                <br/>
+                <h4>Only properly formatted csv files will be processed.</h4>
+                <br/>
+
+                <form id="csvform" role="form" action="/" enctype="multipart/form-data" method="POST">
+                    <div class="form-group">
+                        <label for="contactList">Upload CSV File</label>
+                        <input required class="form-control" id="contactList" type="file" name="contact_list" accept=".csv">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea required class="form-control" rows="5" maxlength="160" id="message" name="message" placeholder="Please enter the message you wish to send"></textarea>
+                    </div>
+                    <h4 class="alert alert-info">The amount of time to process and send messages is dependent on the size of the list.  A list of 100+ numbers can take a few minutes.</h4>
+                    <input class="btn btn-success" id="submit" type="submit" >
+                </form>
+
+            {% endif %}
+
+
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="{{ url_for('static', filename='js/spin.min.js') }}"></script>
+
+    </body>
+
+    <script>
+
+        (function(){
+
+            $(window).bind("pageshow", function(event) { if (event.originalEvent.persisted) { location.reload(); } });
+
+            /*
+            $("#contactList").on("change",function(){
+                $("#submit").prop("disabled", false);
+            });
+            */
+            var spinTarget = document.getElementById("main");
+            var spinOpts = {
+              lines: 13 // The number of lines to draw
+            , length: 28 // The length of each line
+            , width: 14 // The line thickness
+            , radius: 42 // The radius of the inner circle
+            , scale: 1 // Scales overall size of the spinner
+            , corners: 1 // Corner roundness (0..1)
+            , color: '#000' // #rgb or #rrggbb or array of colors
+            , opacity: 0.25 // Opacity of the lines
+            , rotate: 0 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 1 // Rounds per second
+            , trail: 60 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '50%' // Top position relative to parent
+            , left: '50%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+            }
+
+            var spinner = new Spinner(spinOpts);
+            console.log("Spinner created!");
+            console.log(spinner);
+
+            csvform = $("#csvform");
+
+            $("#submit").click(function(){
+
+                if csvform.checkValidity(){
+                    spinner.spin(spinTarget);
+                }
+
+            });
+
+        })();
+
+
+
+
+    </script>
+
+</html>
